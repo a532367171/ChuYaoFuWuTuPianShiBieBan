@@ -11,8 +11,8 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using TensorFlow;
-using 出窑工位采集服务;
-using 出窑工位采集服务.common;
+using 出窑服务图片识别版;
+using 出窑服务图片识别版.common;
 
 namespace 出窑服务图片识别版
 {
@@ -34,8 +34,6 @@ namespace 出窑服务图片识别版
             base.CanPauseAndContinue = true;
             base.ServiceName = "出窑服务图片识别版";  //这个名字很重要，设置不一致会产生 1083 错误哦(在文章最后会说到这个问题)！
         }
-
-
 
         #region 空车
         public delegate void 空车委托(string str);

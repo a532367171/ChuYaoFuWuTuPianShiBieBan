@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace 出窑工位采集服务.common
+namespace 出窑服务图片识别版.common
 {
     public class LogManager
     {

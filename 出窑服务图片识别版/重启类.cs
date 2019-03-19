@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace 出窑工位采集服务
+namespace 出窑服务图片识别版
 {
    public class 重启类
     {

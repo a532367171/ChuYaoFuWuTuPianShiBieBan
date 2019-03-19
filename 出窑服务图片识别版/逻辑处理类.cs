@@ -1,53 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using 出窑服务图片识别版;
 using 出窑服务图片识别版.common;
 
 namespace 出窑服务图片识别版
 {
-    public class 出窑工位判断类
+    class 逻辑处理类
     {
-        string read_old_value_出窑;
+        int int32_这次标识 = 100;
+        int int32_上一次标识 = 100;
+        int int32_次数标识 = 0;
+        int int32_上一次有用的标识 = 100;
 
-        string read_middle_value_出窑;
+        保存旧值 _保存旧值 ;
+        重启类 _重启类;
 
-        string read_new_value_出窑;
+        private string Manufacture = ConfigurationManager.AppSettings["生产企业"];
+        private string 重启路径 = ConfigurationManager.AppSettings["重启路径"];
 
-        string Manufacture;
+        #region 事件
 
-        //string Manufacture = ConfigurationManager.AppSettings["生产企业"];
+        #region 空车
+        public delegate void 空车委托(string str);
 
-        保存旧值 _保存旧值 = new 保存旧值();
-
-        String[] str_old_value_出窑 = new String[2];
-
-        public 出窑工位判断类()
+        public event 空车委托 空车事件;
+        protected virtual void On空车事件触发(string str)
         {
+            if (空车事件 != null)
+            {
+                空车事件(str); /* 事件被触发 */
+            }
+            else
+            {
+                Console.WriteLine("event not fire");
+                Console.ReadKey(); /* 回车继续 */
+            }
         }
 
-        public 出窑工位判断类(string str)
+
+        #endregion
+
+        #region 满车
+        public delegate void 满车委托(string str);
+
+        public event 满车委托 满车事件;
+        protected virtual void On满车事件触发(string str)
         {
-            Manufacture = str;
-            Init();
+            if (满车事件 != null)
+            {
+                满车事件(str); /* 事件被触发 */
+            }
+            else
+            {
+                Console.WriteLine("event not fire");
+                Console.ReadKey(); /* 回车继续 */
+            }
         }
 
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        private void Init()
-        {
-            var sql_ini_出窑 = "select cCAR_nub from Car_state where cManufacture='"+ Manufacture+"' AND cCAR_NO='出窑' order by [id] desc  limit 0,2";
 
-            DataTable isqlite1_ini_出窑 = SQLiteHelper.ExecuteDataTable(sql_ini_出窑, null);
-
-            str_old_value_出窑 = StringHelper.dtToArr1(isqlite1_ini_出窑);
-
-            read_old_value_出窑 = str_old_value_出窑[0];
-
-            read_middle_value_出窑 = str_old_value_出窑[1];
-        }
+        #endregion
 
         #region 一号生产线下车
         public delegate void 一号生产线下车委托(string str);
@@ -177,7 +193,7 @@ namespace 出窑服务图片识别版
         {
             if (工位判断错误日记事件 != null)
             {
-                工位判断错误日记事件(str,ex); /* 事件被触发 */
+                工位判断错误日记事件(str, ex); /* 事件被触发 */
             }
             else
             {
@@ -205,51 +221,97 @@ namespace 出窑服务图片识别版
         }
         #endregion
 
-        public void 工位判断执行类(string read_new_value_出窑)
+        #endregion
+
+        public 逻辑处理类()
         {
-            if (read_new_value_出窑 == read_old_value_出窑 || read_new_value_出窑 == read_middle_value_出窑)
+
+             _保存旧值 = new 保存旧值();
+             _重启类 = new 重启类(重启路径);
+
+            var sql_ini_出窑 = "select cCAR_nub from Car_state where cManufacture='福建省榕圣市政工程股份有限公司连江建材分公司' AND cCAR_NO='出窑图片版' order by [id] desc  limit 0,2";
+
+            DataTable isqlite1_ini_出窑 = SQLiteHelper.ExecuteDataTable(sql_ini_出窑, null);
+
+
+            String[] str_old_value_出窑 = StringHelper.dtToArr1(isqlite1_ini_出窑);
+
+            if (str_old_value_出窑[0]==null)
             {
+                int32_次数标识 = 100;
+
             }
             else
             {
-                try
-                {
-                    if (read_old_value_出窑 == "65" && read_new_value_出窑 == "1")
-                    {
-                        On二号生产线下车事件触发(Manufacture);
-                    }
-                    if (read_old_value_出窑 == "66" && read_new_value_出窑 == "2")
-                    {
-                        On一号生产线上车事件触发(Manufacture);
-                    }
-                    if (read_old_value_出窑 == "68" && read_new_value_出窑 == "4")
-                    {
-                        On出一号窑事件触发(Manufacture);
-                    }
-                    if (read_old_value_出窑 == "72" && read_new_value_出窑 == "8")
-                    {
-                        On出二号窑事件触发(Manufacture);
-                    }
-                    if (read_old_value_出窑 == "80" && read_new_value_出窑 == "16")
-                    {
-                        On出三号窑事件触发(Manufacture);
-                    }
-                    if (read_old_value_出窑 == "96" && read_new_value_出窑 == "32")
-                    {
-                        On出四号窑事件触发(Manufacture);
-                    }
-                    read_middle_value_出窑 = read_old_value_出窑;
-                    read_old_value_出窑 = read_new_value_出窑;
-                }
-                catch (Exception ex)
-                {
-                    On工位判断错误日记事件触发("工位判断错误", ex);
-                }
-                finally
-                {
-                    On保存变化值事件触发("出窑",read_new_value_出窑, Manufacture);
-                }
+                int32_次数标识 = int.Parse(str_old_value_出窑[0]);
+
             }
+            if (str_old_value_出窑[1]==null)
+            {
+                 int32_上一次有用的标识 = 100;
+            }
+            else
+            {
+                int32_上一次有用的标识 = int.Parse(str_old_value_出窑[1]);
+
+            }
+
+        }
+
+
+
+        public void 逻辑判断方法(Int32 bestIdx)
+        {
+
+            if (bestIdx == int32_这次标识)
+            {
+                int32_次数标识++;
+            }
+            else
+            {
+                int32_次数标识 = 0;
+                int32_上一次标识 = int32_这次标识;
+                int32_这次标识 = bestIdx;
+            }
+
+            if (int32_次数标识 > 20 && int32_这次标识 != int32_上一次有用的标识)
+            {
+                int32_上一次有用的标识 = int32_这次标识;
+
+                var isqlite_结果 = _保存旧值.Save_the_车辆状态_value("出窑图片版", int32_这次标识.ToString(), Manufacture);
+
+                switch (int32_这次标识)
+                {
+                    case 0:
+                        On空车事件触发(Manufacture);
+                        break;
+                    case 1:
+                        On出一号窑事件触发(Manufacture);
+                        break;
+                    case 2:
+                        On出二号窑事件触发(Manufacture);
+                        break;
+                    case 3:
+                        On出三号窑事件触发(Manufacture);
+                        break;
+                    case 4:
+                        On出四号窑事件触发(Manufacture);
+                        break;
+                    case 5:
+                        On一号生产线上车事件触发(Manufacture);
+                        break;
+                    case 6:
+                        On二号生产线下车事件触发(Manufacture);
+                        break;
+                    case 7:
+                        On满车事件触发(Manufacture);
+                        break;
+                }
+                int32_次数标识 = 0;
+
+            }
+
+
         }
     }
 }

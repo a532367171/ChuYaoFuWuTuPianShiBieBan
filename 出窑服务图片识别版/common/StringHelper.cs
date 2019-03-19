@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Data;
 
-namespace 出窑工位采集服务.common
+namespace 出窑服务图片识别版.common
 {
     public class StringHelper
     {

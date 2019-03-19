@@ -4,9 +4,9 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
-using 出窑工位采集服务.common;
+using 出窑服务图片识别版.common;
 
-namespace 出窑工位采集服务
+namespace 出窑服务图片识别版
 {
    public class 事件执行类
     {

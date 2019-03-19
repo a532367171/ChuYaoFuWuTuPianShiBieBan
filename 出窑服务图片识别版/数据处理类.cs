@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace 出窑工位采集服务
+namespace 出窑服务图片识别版
 {
     public class 数据处理类
     {
@@ -41,7 +41,6 @@ namespace 出窑工位采集服务
                 Console.ReadKey(); /* 回车继续 */
             }
         }
-
 
         #endregion
 
