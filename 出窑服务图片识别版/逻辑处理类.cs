@@ -18,10 +18,10 @@ namespace 出窑服务图片识别版
         int int32_上一次有用的标识 = 100;
 
         保存旧值 _保存旧值 ;
-        重启类 _重启类;
 
         private string Manufacture = ConfigurationManager.AppSettings["生产企业"];
-        private string 重启路径 = ConfigurationManager.AppSettings["重启路径"];
+        private string 重复次数 = ConfigurationManager.AppSettings["重复次数"];
+
 
         #region 事件
 
@@ -201,6 +201,10 @@ namespace 出窑服务图片识别版
                 Console.ReadKey(); /* 回车继续 */
             }
         }
+
+
+
+
         #endregion
 
         #region 保存变化值
@@ -227,7 +231,6 @@ namespace 出窑服务图片识别版
         {
 
              _保存旧值 = new 保存旧值();
-             _重启类 = new 重启类(重启路径);
 
             var sql_ini_出窑 = "select cCAR_nub from Car_state where cManufacture='福建省榕圣市政工程股份有限公司连江建材分公司' AND cCAR_NO='出窑图片版' order by [id] desc  limit 0,2";
 
@@ -243,18 +246,18 @@ namespace 出窑服务图片识别版
             }
             else
             {
-                int32_次数标识 = int.Parse(str_old_value_出窑[0]);
+                int32_上一次有用的标识 = int.Parse(str_old_value_出窑[0]);
 
             }
-            if (str_old_value_出窑[1]==null)
-            {
-                 int32_上一次有用的标识 = 100;
-            }
-            else
-            {
-                int32_上一次有用的标识 = int.Parse(str_old_value_出窑[1]);
+            //if (str_old_value_出窑[1]==null)
+            //{
+            //     int32_上一次有用的标识 = 100;
+            //}
+            //else
+            //{
+            //    int32_上一次有用的标识 = int.Parse(str_old_value_出窑[1]);
 
-            }
+            //}
 
         }
 
@@ -274,7 +277,7 @@ namespace 出窑服务图片识别版
                 int32_这次标识 = bestIdx;
             }
 
-            if (int32_次数标识 > 20 && int32_这次标识 != int32_上一次有用的标识)
+            if (int32_次数标识 > int.Parse(重复次数) && int32_这次标识 != int32_上一次有用的标识)
             {
                 int32_上一次有用的标识 = int32_这次标识;
 
