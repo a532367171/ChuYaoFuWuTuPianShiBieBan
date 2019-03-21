@@ -100,6 +100,19 @@ namespace 出窑服务图片识别版
         }
         #endregion
 
+        private void SQL操作函数(string sql)
+        {
+            try
+            {
+                On插入SQL事件触发(sql);
+
+            }
+            catch (Exception ex)
+            {
+                On插入SQL错误事件触发("SQL操作函数", ex);
+                throw;
+            }
+        }
 
         public void 空车事件执行函数(string c_Manufacture)
         {
@@ -287,11 +300,11 @@ namespace 出窑服务图片识别版
                 {
                     if (t3)
                     {
-                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "09", "01", "", c_Manufacture, "Y");
+                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "13", "01", "", c_Manufacture, "Y");
                     }
                     else
                     {
-                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "09", "01", "", c_Manufacture, "N");
+                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "13", "01", "", c_Manufacture, "N");
                     }
                     SQLite操作函数(sb_sqlite_工位及RFID.ToString());
                 }
@@ -328,11 +341,11 @@ namespace 出窑服务图片识别版
                 {
                     if (t4)
                     {
-                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "09", "02", "", c_Manufacture, "Y");
+                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "13", "02", "", c_Manufacture, "Y");
                     }
                     else
                     {
-                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "09", "02", "", c_Manufacture, "N");
+                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "13", "02", "", c_Manufacture, "N");
                     }
                     SQLite操作函数(sb_sqlite_工位及RFID.ToString());
 
@@ -369,11 +382,11 @@ namespace 出窑服务图片识别版
                 {
                     if (t5)
                     {
-                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "09", "03", "", c_Manufacture, "Y");
+                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "13", "03", "", c_Manufacture, "Y");
                     }
                     else
                     {
-                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "09", "03", "", c_Manufacture, "N");
+                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "13", "03", "", c_Manufacture, "N");
                     }
                     SQLite操作函数(sb_sqlite_工位及RFID.ToString());
 
@@ -410,11 +423,11 @@ namespace 出窑服务图片识别版
                 {
                     if (t5)
                     {
-                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "09", "04", "", c_Manufacture, "Y");
+                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "13", "04", "", c_Manufacture, "Y");
                     }
                     else
                     {
-                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "09", "04", "", c_Manufacture, "N");
+                        sb_sqlite_工位及RFID.AppendFormat(sqlite_工位及RFID, DateTime.Now.ToString(), "13", "04", "", c_Manufacture, "N");
                     }
                     SQLite操作函数(sb_sqlite_工位及RFID.ToString());
 
@@ -471,18 +484,5 @@ namespace 出窑服务图片识别版
             }
         }
 
-        private void SQL操作函数(string sql)
-        {
-            try
-            {
-                On插入SQL事件触发(sql);
-
-            }
-            catch (Exception ex)
-            {
-                On插入SQL错误事件触发("SQL操作函数",ex);
-                throw;
-            }
-        }
     }
 }

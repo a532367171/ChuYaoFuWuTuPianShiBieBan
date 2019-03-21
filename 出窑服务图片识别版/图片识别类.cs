@@ -24,7 +24,7 @@ namespace 出窑服务图片识别版
             graph.Import(model, "");
         }
 
-        public Int32 识别方法()
+        public Int32 识别方法(out double OU)
         {
             using (var session = new TFSession(graph))
             {
@@ -56,7 +56,8 @@ namespace 出窑服务图片识别版
 
                 var bestIdx = 0;
 
-                float p = 0, best = 0;
+                float p = 0;
+                double best = 0;
                 if (jagged)
                 {
                     var probabilities = ((float[][])result.GetValue(jagged: true))[0];
@@ -65,10 +66,12 @@ namespace 出窑服务图片识别版
 
                     for (int i = 0; i < retResult.Length; i++)
                     {
-                        if (probabilities[i] > best)
+                        if (retResult[i] > best)
                         {
                             bestIdx = i;
-                            best = probabilities[i];
+                            //best = probabilities[i];
+                            best = retResult[i];
+
                         }
                     }
 
@@ -85,6 +88,7 @@ namespace 出窑服务图片识别版
                         }
                     }
                 }
+                OU = best;
                 return bestIdx;
             }
 

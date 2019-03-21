@@ -15,8 +15,15 @@ namespace 出窑服务图片识别版
         private string 显示小窗标识 = ConfigurationManager.AppSettings["显示小窗标识"];
         private string 等待时间 = ConfigurationManager.AppSettings["等待时间"];
         private string 重启路径 = ConfigurationManager.AppSettings["重启路径"];
+        private string 大于多少得概率 = ConfigurationManager.AppSettings["大于多少得概率"];
+
 
         public delegate void 错误日记委托(string str, Exception ex);
+
+        internal void 开始实时取()
+        {
+            throw new NotImplementedException();
+        }
 
         public event 错误日记委托 错误日记事件;
         protected virtual void On错误日记事件触发(string str, Exception ex)
@@ -63,7 +70,7 @@ namespace 出窑服务图片识别版
             }
             catch (Exception ex)
             {
-                On错误日记事件触发("取流错误",ex);
+                On错误日记事件触发("取流错误", ex);
                 _重启类.重启(重启路径);
             }
 
@@ -108,17 +115,33 @@ namespace 出窑服务图片识别版
 
         public bool 开始标识1 { get => 开始标识; set => 开始标识 = value; }
 
-        public void  开始实时取流()
+        public void 开始实时取流()
         {
             using (var windowSrc = new Window("src"))
             using (var frame = new Mat())
             using (var image缩小 = new Mat())
             {
+                int II = 0;
                 while (开始标识1)
                 {
                     while (true)
                     {
-                        capture.Read(frame);
+
+                        for (int i = 0; i < capture.Fps; i++)
+                        {
+                            capture.Read(frame);
+
+                            if (frame.Empty())
+                            {
+                                II++;
+                                break;
+                            }
+
+                        }
+                        if (II>20)
+                        {
+                            _重启类.重启(重启路径);
+                        }
 
                         if (frame.Empty())
                             break;
@@ -127,17 +150,19 @@ namespace 出窑服务图片识别版
 
                         Cv2.ImWrite(临时图片路径, image缩小);
 
-                       Int32 I= _图片识别类.识别方法();
+                        double ou = 0;
 
-                        _逻辑处理类.逻辑判断方法(I);
+                        Int32 I = _图片识别类.识别方法(out ou);
+                        if (ou> Convert.ToDouble(大于多少得概率))
+                        {
+                            _逻辑处理类.逻辑判断方法(I);
+                        }
 
-                        if (显示小窗标识=="1")
+                        if (显示小窗标识 == "1")
                         {
                             windowSrc.ShowImage(image缩小);
 
                         }
-
-
                         Cv2.WaitKey(int.Parse(等待时间));
                     }
 
